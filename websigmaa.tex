@@ -1,0 +1,798 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{pgf}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pdfpages}
+\usepackage{ulem}
+\usepackage{ccicons}
+
+\usetikzlibrary{positioning, shapes}
+\usetikzlibrary{decorations.pathmorphing}
+
+%\definecolor{shaded}{RGB}{70,60,255}
+\definecolor{shaded}{RGB}{200,0,0}
+\usecolortheme[named=shaded]{structure}
+
+\definecolor{stressed}{RGB}{150,40,40}
+\setbeamercolor{alerted_text}{fg=stressed}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left=3mm} 
+\setbeamersize{text margin right=3mm} 
+
+\setbeamerfont{frametitle}{size=\huge}
+
+\setbeamertemplate{sidebar right}{default}{}
+
+\makeatletter
+\define@key{beamerframe}{nofills}[true]{% top
+  \beamer@frametopskip=0pt\relax%
+  \beamer@framebottomskip=0pt\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{%
+    \def\beamer@firstlineitemizeunskip{%
+      \vskip-\partopsep\vskip-\topsep\vskip-\parskip%
+      \global\let\beamer@firstlineitemizeunskip=\relax}%
+    \everypar{\global\let\beamer@firstlineitemizeunskip=\relax}}
+}
+\makeatother
+
+\newcommand{\LL}{\mathbb{L}}
+\newcommand{\setbackgroundblack}{%
+\usebackgroundtemplate{
+\begin{pgfpicture}{0in}{0in}{\paperwidth}{\paperheight}
+\color{black}
+\pgfrect[fill]{\pgfxy(0,0)}{\pgfpoint{\paperwidth}{\paperheight}}
+\end{pgfpicture}
+}
+}
+
+\newcommand{\sectionslide}[1]{%
+\setbackgroundblack
+\begin{frame}[nofills]
+\Huge
+\vfill
+\scaletowidth{\textwidth}{\textcolor{white}{\textbf{#1}}}
+\vfill
+\end{frame}
+\clearbackgroundpicture
+}
+
+\definecolor{FootColor}{rgb}{0.322,0.322,0.322}%
+\definecolor{FootBackgroundColor}{rgb}{1,1,1}%
+
+\setbeamercolor{bottomcolor}{fg=black,bg=gray!15!white}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% stack two things so that they have the same size
+\newlength{\firstline}
+\newlength{\secondline}
+\newcommand{\stacksame}[2]{%
+\setlength{\firstline}{\widthof{#1}}%
+\setlength{\secondline}{\widthof{#2}}%
+\pgfmathsetmacro{\myratio}{\firstline/\secondline}%
+\shortstack{#1\\\scalebox{\myratio}{#2}}}
+
+\newlength{\myscalewidth}
+\newcommand{\scaletowidth}[2]{%
+\setlength{\myscalewidth}{\widthof{#2}}%
+\pgfmathsetmacro{\myscaleratio}{#1/\myscalewidth}%
+\scalebox{\myscaleratio}{#2}}
+
+\setbeamertemplate{footline}{%
+\usebeamerfont{structure}
+\footnotesize
+\begin{tikzpicture}[overlay,remember picture]%
+  \node[opacity=0.8,text opacity=1,anchor=base west,yshift=2pt,xshift=-0.5mm,color=FootColor] (website) at (current page.south west) {ximera.osu.edu};
+%  \node[opacity=0.8,text opacity=1,anchor=base east,yshift=2pt,xshift=0.5mm,color=FootColor,fill=FootBackgroundColor] (twitter) at (current page.south east) {ximera@math.osu.edu};
+\end{tikzpicture}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% I like words in front of faded images
+
+\newcommand{\setbackgroundpicturewhite}[1]{%
+\definecolor{FootColor}{rgb}{0.322,0.322,0.322}%
+\definecolor{FootBackgroundColor}{rgb}{1,1,1}%
+\setbeamercolor{bottomcolor}{fg=black,bg=gray!15!white}%
+\usebackgroundtemplate{%
+\begin{tikzpicture}[overlay,remember picture]%
+\draw[fill=white] (current page.north west) rectangle (current page.south east);%
+\node[fill=white,minimum width=\paperwidth,minimum height=\paperheight,yshift=1.5mm] [anchor=north west] (mynode) {\hspace{-1.5mm}\includegraphics[width=\paperwidth]{#1}};%
+\end{tikzpicture}%
+}}
+
+
+\newcommand{\settallbackgroundpicturewhite}[1]{%
+\definecolor{FootColor}{rgb}{0.322,0.322,0.322}%
+\definecolor{FootBackgroundColor}{rgb}{1,1,1}%
+\setbeamercolor{bottomcolor}{fg=black,bg=gray!15!white}%
+\usebackgroundtemplate{%
+\begin{tikzpicture}[overlay,remember picture]%
+\draw[fill=white] (current page.north west) rectangle (current page.south east);%
+\node[minimum width=\paperwidth,minimum height=\paperheight,yshift=1.5mm] [anchor=north west] (mynode) {\hspace{-1.5mm}\includegraphics[height=\paperheight]{#1}};%
+\end{tikzpicture}%
+}}
+
+
+\newcommand{\settallbackgroundpictureblack}[1]{%
+\definecolor{FootColor}{rgb}{0.678,0.678,0.678}%
+\definecolor{FootBackgroundColor}{rgb}{0,0,0}%
+\setbeamercolor{bottomcolor}{fg=black,bg=gray!15!white}%
+\usebackgroundtemplate{%
+\begin{tikzpicture}[overlay,remember picture]%
+\draw[fill=black] (current page.north west) rectangle (current page.south east);%
+\node[minimum width=\paperwidth,minimum height=\paperheight,yshift=1.5mm] [anchor=north west] (mynode) {\hspace{-1.5mm}\includegraphics[height=\paperheight]{#1}};%
+\end{tikzpicture}%
+}}
+
+
+\newcommand{\setbackgroundpictureblack}[1]{%
+\definecolor{FootColor}{rgb}{0.678,0.678,0.678}%
+\definecolor{FootBackgroundColor}{rgb}{0,0,0}%
+\setbeamercolor{bottomcolor}{fg=white,bg=gray!15!black}%
+\usebackgroundtemplate{%
+\begin{tikzpicture}[overlay,remember picture]%
+\draw[fill=black] (current page.north west) rectangle (current page.south east);%
+\node[minimum width=\paperwidth,minimum height=\paperheight,yshift=1.5mm] [anchor=north west] (mynode) {\hspace{-1.5mm}\includegraphics[width=\paperwidth]{#1}};%
+\end{tikzpicture}%
+}}
+
+
+\newcommand{\setdarkbackgroundpictureblack}[1]{%
+\definecolor{FootColor}{rgb}{0.678,0.678,0.678}%
+\definecolor{FootBackgroundColor}{rgb}{0,0,0}%
+\setbeamercolor{bottomcolor}{fg=white,bg=gray!15!black}
+\usebackgroundtemplate{%
+\begin{tikzpicture}[overlay,remember picture]%
+\draw[fill=black] (current page.north west) rectangle (current page.south east);%
+\node[minimum width=\paperwidth,minimum height=\paperheight,yshift=1.5mm] [anchor=north west] (mynode) {\hspace{-1.5mm}\includegraphics[width=\paperwidth]{#1}};%
+\draw[fill=black,opacity=0.75] (current page.north west) rectangle (current page.south east);%
+\end{tikzpicture}%
+}}%
+
+
+\newcommand{\setdarkbackgroundpicturewhite}[1]{%
+\definecolor{FootColor}{rgb}{0.322,0.322,0.322}%
+\definecolor{FootBackgroundColor}{rgb}{1,1,1}%
+\setbeamercolor{bottomcolor}{fg=black,bg=gray!15!white}
+\usebackgroundtemplate{%
+\begin{tikzpicture}[overlay,remember picture]%
+\draw[fill=white] (current page.north west) rectangle (current page.south east);%
+\node[minimum width=\paperwidth,minimum height=\paperheight,yshift=1.5mm] [anchor=north west] (mynode) {\hspace{-1.5mm}\includegraphics[width=\paperwidth]{#1}};%
+\draw[fill=white,opacity=0.75] (current page.north west) rectangle (current page.south east);%
+\end{tikzpicture}%
+}}%
+
+\newcommand{\settalldarkbackgroundpicturewhite}[1]{%
+\definecolor{FootColor}{rgb}{0.322,0.322,0.322}%
+\definecolor{FootBackgroundColor}{rgb}{1,1,1}%
+\setbeamercolor{bottomcolor}{fg=black,bg=gray!15!white}
+\usebackgroundtemplate{%
+\begin{tikzpicture}[overlay,remember picture]%
+\draw[fill=white] (current page.north west) rectangle (current page.south east);%
+\node[minimum width=\paperwidth,minimum height=\paperheight,yshift=1.5mm] [anchor=north west] (mynode) {\hspace{-1.5mm}\includegraphics[height=\paperheight]{#1}};%
+\draw[fill=white,opacity=0.75] (current page.north west) rectangle (current page.south east);%
+\end{tikzpicture}%
+}}%
+
+
+\newcommand{\settalldarkbackgroundpictureblack}[1]{%
+\definecolor{FootColor}{rgb}{0.678,0.678,0.678}%
+\definecolor{FootBackgroundColor}{rgb}{0,0,0}%
+\setbeamercolor{bottomcolor}{fg=black,bg=gray!15!white}
+\usebackgroundtemplate{%
+\begin{tikzpicture}[overlay,remember picture]%
+\draw[fill=black] (current page.north west) rectangle (current page.south east);%
+\node[minimum width=\paperwidth,minimum height=\paperheight,yshift=1.5mm] [anchor=north west] (mynode) {\hspace{-1.5mm}\includegraphics[height=\paperheight]{#1}};%
+\draw[fill=black,opacity=0.75] (current page.north west) rectangle (current page.south east);%
+\end{tikzpicture}%
+}}%
+
+\newcommand{\clearbackgroundpicture}{\usebackgroundtemplate{}%
+\definecolor{FootColor}{rgb}{0.322,0.322,0.322}%
+\definecolor{FootBackgroundColor}{rgb}{1,1,1}%
+\setbeamercolor{bottomcolor}{fg=black,bg=gray!15!white}
+}
+
+
+\begin{document}
+\setbeamercolor{background canvas}{bg=white,fg=black}
+\usebeamercolor[fg]{background canvas}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearbackgroundpicture
+\begin{frame}[nofills]
+  \null\vspace{10pt}  
+  \Huge
+
+  \scaletowidth{\textwidth}{\textbf{Using \includegraphics[height=24pt]{ximera-wordmark.pdf} to build}} \\[-0.5ex]
+  \scaletowidth{\textwidth}{\textbf{online interactive math activities}}
+  
+  \vfill
+  \color{gray}
+  \large
+      %\scaletowidth{\textwidth}{%}
+        \parbox[t]{\widthof{\textbf{JMM Web SIGMAA}}}{\textbf{JMM Web SIGMAA}\\San Diego, California\\January 12, 2018}
+    \hfill
+      %\scaletowidth{\textwidth}{
+        \parbox[t]{\widthof{\textbf{Jim Fowler and Bart Snapp}}}{{\textbf{Jim Fowler and Bart Snapp}} \\
+      {The Ohio State University} \\
+      {Department of Mathematics}}
+
+  \vspace{24pt}\null
+\end{frame}
+
+\begin{frame}
+  \frametitle{Joint work}
+  \Large
+
+  This is a joint project \\
+  \quad with many contributors \textcolor{gray}{and} \\
+  supported by NSF DUE--1245433 \textcolor{gray}{and} \\
+  \quad the Shuttleworth Foundation \textcolor{gray}{and} \\
+  \quad OSU Library's textbook affordability grant \textcolor{gray}{and} \\
+  \quad Ohio State's Affordable Learning eXchange (ALX).
+
+  \vfill
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Problem}
+  \Large
+
+  I want to publish \LaTeX\ notes (or a whole textbook) \\
+  \quad for my students.
+
+  \vfill
+  
+  There are questions embedded in the text.
+
+  \vfill
+  
+  I want to know if my students answer the questions, \\
+  \quad and when they do, \\
+  I want to reward them with points in the gradebook.
+
+  \vfill
+
+  I \textit{don't} want to rebuild this platform every year.
+  
+\end{frame}
+
+\settallbackgroundpicturewhite{covers/frontCover1.pdf}
+\begin{frame}
+\end{frame}
+\settallbackgroundpicturewhite{covers/frontCover2.pdf}
+\begin{frame}
+\end{frame}
+\settallbackgroundpicturewhite{covers/frontCover3.pdf}
+\begin{frame}
+\end{frame}
+\settallbackgroundpicturewhite{covers/frontCoverE.pdf}
+\begin{frame}
+\end{frame}
+\clearbackgroundpicture
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{A Solution}
+  \large
+  
+  \textbf{Ximera} converts \LaTeX\ source stored in \texttt{git} repositories, \\
+  \quad into both paper worksheets and interactive webpages, \\
+  storing student outcomes in the LMS gradebook, \\
+  \quad and all the while capturing an event stream  \\
+  \quad\quad that can be mined for insights about learning.
+
+  \vfill
+  
+  Page state is synchronized in real-time, \\
+  \quad so instructors can watch students working.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{``Users'' is a too broad category}
+
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      The users of Ximera include
+      \begin{itemize}
+      \item Authors
+      \item Instructors
+      \item Education Researchers
+      \item Students and learners
+      \item Developers and designers
+      \end{itemize}
+      and their needs are different.      
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \huge
+      A solution must \\
+      create workflows \\
+      for all users.
+    \end{column}
+  \end{columns}
+
+
+
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[nofills]
+  \vfill
+  \huge
+
+  \begin{tabular}{@{}l@{ }l@{ }l}
+  Easy things & should & be easy. \\
+  Hard things & shouldn't & be impossible.
+  \end{tabular}
+  \vfill
+\end{frame}
+
+\begin{frame}
+  \frametitle{\TeX\ as input for computer algebra}
+  \large
+
+  The input \texttt{\$\textbackslash answer\{\textbackslash cos\^{}2 x\}\$} \\
+  \quad will create an answer blank, \\
+  \quad\quad the correct answer to which is $\cos^2 x$.
+
+  \vfill
+  
+  \texttt{\textbackslash answer}s can be placed in surprising places, e.g.,
+  \[
+    \mbox{\texttt{\$\textbackslash sqrt\{\textbackslash frac\{1\}\{\textbackslash answer\{4\}\}\} = \textbackslash frac\{1\}\{2\}\$}}
+  \]
+
+  \vfill
+
+  MathJax converts \texttt{\textbackslash answer}s into appropriately
+  sized textfields.
+
+  \vfill
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\sectionslide{For Authors\ldots}
+
+\begin{frame}
+  \frametitle{Author Workflow}
+  \large
+  
+  \begin{enumerate}
+  \item Write \LaTeX\, using \texttt{\textbackslash answer} and the like.
+  \item Store your \TeX\ files in a \texttt{git} repository.
+  \item Run \texttt{xake bake} to perform \TeX-to-HTML conversion \\
+    \quad on any changed files.
+  \item Content is published via a \texttt{git push}.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\LaTeX\ as an archival format}
+  \large
+
+  \LaTeX\ amounts to labeled parentheses  \\
+  \quad so it's not so different from XML, \\
+  but it has saner semantics for whitespace.
+
+  \vfill
+
+  Authors must be confident that their work will last: \\
+  \quad ``Even if everything else fails, \\
+  \quad\quad at least \texttt{pdflatex} will run.''
+
+  \vfill
+  
+  \textbf{Source-level graphics:} TikZ is converted to SVGs.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Semantic markup}
+  \large
+  
+  \texttt{\textbackslash begin\{multipleChoice\}} \\
+  \quad\texttt{\textbackslash choice\{One of them\}} \\
+  \quad\texttt{\textbackslash choice[correct]\{Pick me!\}} \\    
+  \quad\texttt{\textbackslash choice\{Another one\}} \\
+  \quad\texttt{\textbackslash choice\{Not this last one\}} \\
+  \texttt{\textbackslash end\{multipleChoice\}}  
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Promote a particular pedagogy}
+  \large
+
+  \texttt{\textbackslash begin\{hint\}} \\
+  \quad\texttt{What can a hint include?} \\
+  \quad\texttt{\textbackslash begin\{multipleChoice\}} \\
+  \quad\quad\texttt{\textbackslash choice\{Just static text\}} \\
+  \quad\quad\texttt{\textbackslash choice[correct]\{More questions\}} \\
+  \quad\texttt{\textbackslash end\{multipleChoice\}}   \\
+  \texttt{\textbackslash end\{hint\}}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Promote a particular pedagogy}
+  \Large
+  
+  I want a platform that makes it easy to \\
+  \quad present learners with some content \\
+  \quad\quad (either through text or video) \\
+  \quad and help them check their understanding, \\
+  \quad\quad with hints and feedback that \\
+  \quad\quad\quad don't just tell the answer, \\
+  \quad\quad\quad but rather provide scaffolding questions.
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Take version control seriously}
+  \large
+  
+  \textbf{Students see the version of the activity \\
+  \quad to which they most recently submitted work.}
+
+  \vfill  
+  
+  When the author changes a page, \\
+  \quad the students receive a real-time notification.
+
+  \vfill  
+  
+  Everyone sees an ``edit'' button at the top of every page, \\
+  \quad so students can contribute to the content.
+  
+  \vfill
+
+  Researchers can track when a change to an activity \\
+  \quad improves student outcomes.
+
+  \vfill
+
+  Immutable resources make caching easier.
+  
+  \vfill
+  \vfill
+  \vfill
+  
+\end{frame}  
+
+\begin{frame}
+  \frametitle{Conversion to HTML}
+  \large
+  
+  \texttt{xake bake} is performed in part by \texttt{htlatex} \\
+  \quad but relies upon MathJax to render math. \\
+  The usage of \texttt{\textbackslash newcommand} is captured \\
+  \quad in order to tell MathJax about such \texttt{newcommand}s.
+
+  \vfill
+
+  Conversion to HTML is orthogonal to the \textbf{Ximera server,} \\
+  \quad which (among other things) saves student work \\
+  \quad\quad and records grades to the LMS gradebook.
+  
+\end{frame}
+
+\sectionslide{For Instructors\ldots}
+
+\begin{frame}
+  \frametitle{Instructor Workflow}
+  \large
+  
+  \begin{enumerate}
+  \item Run \texttt{xake lti your.random.key} to generate a secret.
+  \item Append \texttt{/lti.xml} to a Ximera URL.
+  \item Use that URL as the external tool configuration \\
+    \quad in your LMS.
+  \item Type your key and secret into your LMS.
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+  \large
+  
+  As students complete activities, \\
+  \quad a green progress bar fills up, \\
+  \quad which also changes the score in the gradebook.
+
+  \vfill
+  
+  Instructors can watch students working in real-time, \\
+  \quad and even chat with them.
+
+  \vfill
+
+  When an instructor changes a student's work, \\
+  \quad those changes appear on the student's screen in real-time \\
+  \quad\quad ---and vice versa.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Iterate on design}
+  \large
+  
+  Instructors interpolate between \\
+  \quad authors and researchers \\
+  since an instructor may make small changes to the content \\
+  \quad informed by data on how students have used the content.
+
+  \vfill
+  
+  A \textbf{statistics} button provides summary statistics to instructors, \\
+  \quad facilitating this iteration on design.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\sectionslide{For Researchers\ldots}
+
+\begin{frame}
+  \frametitle{Researcher Workflow}
+  \large
+  
+  \begin{enumerate}
+  \item Download new events with \texttt{xake data download}
+  \item Then dump all events with \texttt{xake data json}
+  \end{enumerate}
+
+  \vfill
+  
+  Events are stored in the xAPI taxonomy, which amounts to \\
+  \quad actor-verb-object triples.
+
+  \vfill
+  
+  For example, \\
+  \quad ``$\langle\mbox{\textit{student}}\rangle$ answered $\langle\mbox{\textit{problem}}\rangle$ correctly.''
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Many verbs}
+  \large
+
+  \texttt{\textbackslash youtube\{aVTzlhkshTk\}} embeds a YouTube player \\
+  \quad for the video with id \texttt{aVTzlhkshTk}.
+
+  \vfill
+
+  Scrubbing through the video generates logs like: \\
+  \quad ``While watching $\langle\mbox{\textit{video}}\rangle$, \\
+  \quad\quad $\langle\mbox{\textit{student}}\rangle$ skipped from $\langle\mbox{\textit{time A}}\rangle$ to $\langle\mbox{\textit{time B}}\rangle$.'' \\
+  %These conform to the xAPI taxonomy.
+
+  A \textbf{map--reduce} task summarizes the event logs for instructors, \\
+  \quad so they can see common misconceptions.
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sectionslide{For Students\ldots}
+
+\begin{frame}
+  \frametitle{Student Workflow}
+  \large
+  
+  \begin{enumerate}
+  \item Open the course in the LMS.
+  \item Click on a Ximera activity.
+  \item Work on the activity, \\
+    \quad confident your work is being saved every few seconds.
+  \end{enumerate}
+
+  Ximera pages work on mobile devices, \\
+  \quad and even partial work is saved.
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sectionslide{For Developers\ldots}
+
+\begin{frame}
+  \frametitle{Interactive content}
+  \Large
+
+  \vfill
+  
+  Parallel to \texttt{\textbackslash includegraphics\{picture.png\}},\\
+  \quad Ximera has \texttt{\textbackslash includeinteractive\{code.js\}},
+  where \texttt{code.js} is a CommonJS or AMD-style module \\
+  \quad with a magic dependency \texttt{div} \\
+  \quad\quad that provides access to the DOM \\
+  \quad and also a dependency \texttt{db}.
+
+  \vfill
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{The database as a proxied object}
+  \Large
+  
+  Objects on Ximera pages have access to an object \texttt{db} \\
+  \quad and changes to \texttt{db} are saved to the server. \\[1ex]
+  In fact, \texttt{db} participates in \\
+  \quad Fraser's differential synchronization  algorithm, \\
+  \quad\quad so multiple browsers can work on the same page.
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Etymology of Ximera}
+
+  \large
+  Instead of inventing new monsters, \\
+  \quad \textbf{Ximera glues together existing monsters.}
+
+  \begin{description}[Problem generation]
+    \item[Authentication] GnuPG and LTI
+    \item[Interactive content] JavaScript
+    \item[Problem generation] Sage\TeX\
+    \item[Version control] \texttt{git} for source \textit{and} compiled assets
+    \item[Markup]  \LaTeX\ (facilitated by \texttt{htlatex})
+    \item[Event Logs] xAPI (also known as ``Tin Can'')
+    \end{description}
+\end{frame}  
+
+\clearbackgroundpicture
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[nofills]
+
+  \vfill
+
+  \scaletowidth{\textwidth}{\textbf{Thank You}}
+
+  \vfill
+  \begin{center}
+    \begin{tabular}{rl}
+      \textcolor{gray}{Email} & \texttt{ximera@math.osu.edu} \\
+      \textcolor{gray}{Website} & \texttt{https://ximera.osu.edu/}
+    \end{tabular}
+  \end{center}
+  \vfill
+   \vfill
+   \null\hfill\ccbysa \\[-2ex]
+   \null\hfill\footnotesize{Licensed for reuse under a Creative Commons BY-NC-SA License}
+
+\end{frame}
+
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\begin{frame}
+  \frametitle{Getting Started (through CoCalc)}
+
+  In a terminal of a \texttt{https://cocalc.com/} project, run \\
+  \quad\texttt{curl -OL http://xandbox.github.io/cocalc/install.sh} \\
+  \quad\texttt{source install.sh} \\
+  \quad\texttt{cd xandbox} \textcolor{gray}{and look at \texttt{first.tex}.} \\
+  \quad\texttt{xake name }$\langle\mbox{\textit{your name}}\rangle$ \\
+  \quad\texttt{xake bake} \textcolor{gray}{to convert \LaTeX\ to HTML,} \\
+  \quad\texttt{xake frost} \textcolor{gray}{to store the HTML in the git repository,} \\
+  \quad\texttt{xake serve} \textcolor{gray}{to push to \texttt{ximera.osu.edu}.} \\
+  Find your content at \texttt{https://ximera.osu.edu/}$\langle\mbox{\textit{your name}}\rangle$\texttt{/first}
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Taking \TeX\ and Sage\TeX\ seriously}
+  \Large
+  
+\texttt{\textbackslash newcommand\{\textbackslash polynomial\}\{x\^{}2 + x + 1\}\}} \\
+\texttt{\$\textbackslash answer\{\textbackslash polynomial\}\$}
+
+  \vfill
+  
+  \texttt{\$\textbackslash answer\{\textbackslash sage\{derivative(cos(x),x)\}\} = }\\
+  \quad\quad\texttt{\textbackslash frac\{d\}\{dx\} \textbackslash cos x\$}
+
+  \vfill
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Philosophy of the Problem}
+  \Large
+
+  \textbf{Assessment must be open-source.} \\
+  \quad To pay Pearson to grade our students \\
+  \quad\quad is to outsource our core mission. \\
+  \quad The most engaged students will want \\
+  \quad\quad to dig into the guts of the assessment platform.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Philosophy of the Problem}
+  \Large
+  
+  \textbf{Don't re-solve solved problems.} \\
+  \quad There are open platforms for randomized problems. \\
+  \quad The pain point is around \\
+  \quad\quad tracking learner engagement \\
+  \quad with activities \\
+  \quad\quad that are more conceptual than computational.
+  
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{Don't invent new protocols.}
+  \large
+  
+  \texttt{ximera.osu.edu} is a GPG keyserver.
+
+  \texttt{ximera.osu.edu} speaks the \texttt{git} protocol.
+
+  \vfill
+
+  So those who have submitted a signed key to \texttt{ximera.osu.edu} \\
+  \quad may publish content \textcolor{gray}{(``\texttt{xake serve}'')} \\
+  \quad by making a \texttt{git push} of both \TeX\ source and HTML. \\
+
+  \vfill  
+  
+  The HTML is stored \textcolor{gray}{(by ``\texttt{xake frost}'')} \\
+  \quad in commits hanging off the master branch.
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Randomized problem generation}
+  \Large
+
+  \vfill
+
+  Produce 1 example with Sage\TeX, say \texttt{problem.tex}
+
+  \vfill
+
+  Create symbolic links to that single example, say \\
+  \quad\texttt{ln -s problem.tex problem.ditto1.tex} \\
+  \quad\texttt{ln -s problem.tex problem.ditto2.tex} \\
+  \quad\texttt{ln -s problem.tex problem.ditto3.tex} \\
+  and run \texttt{xake bake}.
+
+  \vfill  
+  
+\end{frame}
