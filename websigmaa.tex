@@ -15,10 +15,8 @@
 \usetikzlibrary{positioning, shapes}
 \usetikzlibrary{decorations.pathmorphing}
 
-%\definecolor{shaded}{RGB}{70,60,255}
 \definecolor{shaded}{RGB}{200,0,0}
 \usecolortheme[named=shaded]{structure}
-
 \definecolor{stressed}{RGB}{150,40,40}
 \setbeamercolor{alerted_text}{fg=stressed}
 
@@ -44,12 +42,11 @@
 }
 \makeatother
 
-\newcommand{\LL}{\mathbb{L}}
 \newcommand{\setbackgroundblack}{%
 \usebackgroundtemplate{
 \begin{pgfpicture}{0in}{0in}{\paperwidth}{\paperheight}
 \color{black}
-\pgfrect[fill]{\pgfxy(0,0)}{\pgfpoint{\paperwidth}{\paperheight}}
+\pgfrect[fill]{\pgfxy(0,-1)}{\pgfpoint{\paperwidth}{2\paperheight}}
 \end{pgfpicture}
 }
 }
@@ -291,14 +288,14 @@
   
   \textbf{Ximera} converts \LaTeX\ source stored in \texttt{git} repositories, \\
   \quad into both paper worksheets and interactive webpages, \\
-  storing student outcomes in the LMS gradebook, \\
+  storing scores in the LMS gradebook, \\
   \quad and all the while capturing an event stream  \\
   \quad\quad that can be mined for insights about learning.
 
   \vfill
   
   Page state is synchronized in real-time, \\
-  \quad so instructors can watch students working.
+  \quad so instructors can watch students as they work.
 
 \end{frame}
 
@@ -502,7 +499,7 @@
   \begin{enumerate}
   \item Run \texttt{xake lti your.random.key} to generate a secret.
   \item Append \texttt{/lti.xml} to a Ximera URL.
-  \item Use that URL as the external tool configuration \\
+  \item Use that URL as the external tool configuration URL \\
     \quad in your LMS.
   \item Type your key and secret into your LMS.
   \end{enumerate}
